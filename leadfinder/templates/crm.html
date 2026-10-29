@@ -1,0 +1,35 @@
+<section id="pipeline-view" class="catalog-panel" hidden aria-labelledby="pipeline-title">
+  <div class="catalog-header"><div><h2 id="pipeline-title">Funil comercial</h2><p class="field-help">Mova cada oportunidade para sua próxima etapa.</p></div><button type="button" class="secondary-button" id="pipeline-refresh">Atualizar funil</button></div>
+  <div class="pipeline-tools"><label for="pipeline-saved">Funil</label><select id="pipeline-saved"><option value="">Todos os leads</option></select><label for="pipeline-query">Buscar no funil</label><input id="pipeline-query" type="search" placeholder="Nome, telefone ou endereço"><p id="pipeline-feedback" role="status"></p></div>
+  <div id="pipeline-board" class="pipeline-board" role="region" aria-label="Kanban de oportunidades" tabindex="0"></div>
+</section>
+
+<section id="tasks-view" class="catalog-panel" hidden aria-labelledby="tasks-title">
+  <div class="catalog-header"><div><h2 id="tasks-title">Lembretes e próximos contatos</h2><p class="field-help">Acompanhe suas tarefas; crie lembretes pela ficha do lead.</p></div><select id="tasks-filter" aria-label="Filtrar lembretes"><option value="pending">Pendentes</option><option value="overdue">Vencidos</option><option value="completed">Concluídos</option><option value="all">Todos</option></select></div>
+  <div id="tasks-list" class="tasks-list" aria-live="polite"></div>
+</section>
+
+<section id="workspace-view" class="catalog-panel" hidden aria-labelledby="workspace-title">
+  <div class="catalog-header"><div><h2 id="workspace-title">Seu workspace</h2><p class="field-help">Contexto do produto e cópias dos seus dados.</p></div></div>
+  <div class="workspace-settings-grid">
+    <section class="workspace-settings-card"><h3>Contexto do produto para a IA</h3><p>Estas informações serão usadas nas próximas mensagens ao assistente. Você pode ajustar o público e a campanha durante a conversa.</p>
+      <form id="product-context-form"><div class="field"><label for="product-name">Produto ou serviço</label><textarea id="product-name" maxlength="2000" rows="2" placeholder="Nome e o que você oferece"></textarea></div><div class="field"><label for="product-differentials">Diferenciais e benefícios verificáveis</label><textarea id="product-differentials" maxlength="2000" rows="3"></textarea></div><div class="field"><label for="product-audience">Público-alvo</label><textarea id="product-audience" maxlength="2000" rows="2"></textarea></div><div class="field"><label for="product-offer">Oferta e objetivo do contato</label><textarea id="product-offer" maxlength="2000" rows="2"></textarea></div><div class="field"><label for="product-tone">Tom de voz</label><input id="product-tone" maxlength="2000" placeholder="Ex.: direto, humano e profissional"></div><button class="primary-button" type="submit">Salvar contexto do produto</button><p id="product-feedback" role="status"></p></form>
+    </section>
+    <section class="workspace-settings-card"><h3>Backup protegido por senha</h3><p>Inclui leads, categorias, histórico, tarefas, mensagens e credenciais das integrações deste workspace. Guarde a senha: ela será necessária para restaurar.</p>
+      <form id="backup-export-form"><div class="field"><label for="backup-password">Senha para proteger o backup</label><input id="backup-password" type="password" minlength="12" maxlength="200" required autocomplete="new-password"></div><button type="submit" class="primary-button">Baixar backup completo</button></form>
+      <hr><h3>Restaurar um backup</h3><p>Veja a prévia antes de substituir o workspace atual. Uma cópia anterior será guardada localmente. Em outro computador, o WhatsApp pode solicitar um novo QR code.</p>
+      <form id="backup-preview-form"><div class="field"><label for="restore-file">Arquivo de backup</label><input id="restore-file" type="file" accept=".lfbackup" required></div><div class="field"><label for="restore-password">Senha do arquivo</label><input id="restore-password" type="password" minlength="12" maxlength="200" required autocomplete="off"></div><button type="submit" class="secondary-button">Analisar backup</button></form>
+      <div id="restore-preview" hidden></div><form id="backup-restore-form" hidden><div class="field"><label for="restore-confirmation">Digite o nome atual do workspace</label><input id="restore-confirmation" required autocomplete="off" placeholder="{{ workspace.name }}"></div><div class="field"><label for="restore-account-password">Sua senha atual da conta</label><input id="restore-account-password" type="password" required autocomplete="current-password"></div><p>Os dados atuais serão substituídos. Disparos restaurados permanecerão parados até sua revisão.</p><button type="submit" class="primary-button">Confirmar restauração do workspace</button></form>
+      <p id="backup-feedback" role="status"></p><a class="text-button" href="/api/backups/recovery" download>Baixar cópia anterior à última restauração</a>
+    </section>
+  </div>
+</section>
+
+<dialog id="dossier-dialog" class="dossier-dialog" aria-labelledby="dossier-title">
+  <div class="dialog-top"><span>Ficha do lead</span><button type="button" class="icon-button" data-close-crm-dialog aria-label="Fechar ficha do lead">{{ icon('close') }}</button></div>
+  <div id="dossier-content"></div><p id="dossier-feedback" role="status" hidden></p>
+</dialog>
+
+<dialog id="bulk-dialog" class="directory-dialog" aria-labelledby="bulk-title"><div class="dialog-top"><h2 id="bulk-title">Atualizar leads selecionados</h2><button type="button" class="icon-button" data-close-crm-dialog aria-label="Fechar ações em lote">{{ icon('close') }}</button></div>
+  <form id="bulk-form"><div class="field"><label for="bulk-stage">Etapa comercial</label><select id="bulk-stage"><option value="">Manter etapa atual</option></select></div><div class="field"><label for="bulk-status">Status do contato em lote</label><select id="bulk-status"><option value="">Manter status atual</option><option value="new">Sem contato</option><option value="contacted">Contato iniciado</option><option value="conversed">Já houve conversa</option></select></div><div class="field"><label for="bulk-category-mode">Operação com categorias</label><select id="bulk-category-mode"><option value="keep">Manter categorias</option><option value="add">Adicionar às categorias</option><option value="remove">Remover das categorias</option><option value="replace">Substituir categorias</option></select></div><fieldset class="organize-categories"><legend>Categorias</legend><div id="bulk-categories"></div></fieldset><p id="bulk-feedback" role="status"></p><button class="primary-button" type="submit">Aplicar aos selecionados</button></form>
+</dialog>

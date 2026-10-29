@@ -1,0 +1,86 @@
+{% macro icon(name) -%}
+<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-{{ name }}"></use></svg>
+{%- endmacro %}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="leadfinder-token" content="{{ api_token }}">
+  <meta name="color-scheme" content="light dark">
+  <title>LeadFinder — Estabelecimentos</title>
+  <script src="{{ url_for('static', filename='js/theme.js', v='4') }}"></script>
+  <link rel="preload" href="{{ url_for('static', filename='fonts/Geist-Variable.ttf') }}" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css', v='6') }}">
+  <script src="{{ url_for('static', filename='js/app.js', v='15') }}" defer></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/directory.css', v='1') }}">
+  <script src="{{ url_for('static', filename='js/directory.js', v='14') }}" defer></script>
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/crm.css',v='14') }}">
+  <script src="{{ url_for('static',filename='js/crm.js',v='14') }}" defer></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/outreach.css', v='9') }}">
+  <script src="{{ url_for('static',filename='js/outreach.js',v='14') }}" defer></script>
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/beautiful-ui.css',v='12') }}">
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/ai-workspace.css',v='14') }}">
+  <script src="{{ url_for('static',filename='js/beautiful-ui.js',v='12') }}" defer></script>
+  <script src="{{ url_for('static',filename='js/ai-settings.js',v='12') }}" defer></script>
+  <script src="{{ url_for('static',filename='js/ai-chat.js',v='14') }}" defer></script>
+  {% if initial_view|default('catalog') in ['profile', 'integrations', 'ai'] %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v='6') }}">
+  {% if initial_view == 'integrations' %}<script src="{{ url_for('static', filename='js/integrations.js', v='9') }}" defer></script>{% endif %}
+  {% endif %}
+<script src="{{ url_for('static',filename='js/lead-editor.js',v='1') }}" defer></script>
+<link rel="stylesheet" href="{{ url_for('static',filename='css/agent-actions.css',v='1') }}">
+<link rel="icon" type="image/png" href="{{ url_for('static',filename='images/leadfinder-symbol.png',v='1') }}"></head>
+<body data-initial-funnel="{{ request.args.get('funnel','') }}" data-workspace-id="{{ workspace.id }}" data-initial-message-tab="{{ 'ai' if request.args.get('tab') == 'assistant' else '' }}" data-ai-thread="{{ request.args.get('conversation','') }}" data-initial-view="{{ initial_view|default('catalog') }}" data-workspace="{{ workspace.name }}" data-user-name="{{ current_user.name }}">
+  {% include 'icons.html' %}
+  <a class="skip-link" href="#main-content">Ir para o conteúdo</a>
+  <header class="title-bar">
+    <a class="brand" href="/" aria-label="LeadFinder início" title="{{ workspace.name }}"><span class="brand-mark"><img class="brand-logo" src="{{ url_for('static',filename='images/leadfinder-symbol.png',v='1') }}" alt="" width="28" height="28"></span><span class="workspace-brand"><strong>{{ workspace.name }}</strong><small>LeadFinder Workspace</small></span></a>
+    <div class="title-bar-content"><div class="page-title-group"><span class="mobile-workspace">{{ workspace.name }}</span><h1 id="page-title">Estabelecimentos</h1></div><div class="title-bar-actions"><button class="quick-search" id="quick-search" aria-label="Buscar no catálogo">{{ icon('search') }}<span>Buscar no catálogo…</span><kbd>Ctrl K</kbd></button><span class="toolbar-divider"></span><button class="primary-button" id="new-search">{{ icon('plus') }}Nova busca</button></div></div>
+  </header>
+
+  <aside class="sidebar">
+    <nav aria-label="Navegação principal"><div class="nav-label">Prospecção</div><button class="nav-item active" data-view="catalog" aria-current="page">{{ icon('grid') }}<span>Estabelecimentos</span></button><button class="nav-item" data-view="leads">{{ icon('store') }}<span>Leads</span><span class="nav-count" id="nav-count">0</span></button><button class="nav-item" data-view="pipeline">{{ icon('grid') }}<span>Funil comercial</span></button><button class="nav-item" data-view="tasks">{{ icon('history') }}<span>Lembretes</span></button><button class="nav-item" data-view="workspace">{{ icon('database') }}<span>Workspace</span></button><button class="nav-item" data-view="history">{{ icon('history') }}<span>Histórico de buscas</span></button><div class="nav-label">Conexões</div><button class="nav-item" data-view="agents">{{ icon('chat') }}<span>Agentes</span></button><button class="nav-item" data-view="messages">{{ icon('chat') }}<span>Mensagens</span></button><button class="nav-item" data-view="automation">{{ icon('bolt') }}<span>Automação</span></button></nav>
+    <div class="sidebar-bottom"><button id="theme-toggle" class="theme-row" type="button" role="switch" aria-label="Modo escuro" aria-checked="false" title="Alternar entre modo claro e escuro">{{ icon('moon') }}<span>Modo escuro</span><span class="switch-track" aria-hidden="true"><span></span></span></button><details class="account-menu"><summary class="workspace-account"><span class="account-avatar">{{ current_user.name[:2]|upper }}</span><span class="account-identity"><strong>{{ current_user.name }}</strong><small>@{{ current_user.username }}</small></span><span class="account-more" aria-hidden="true">⋯</span></summary><div class="account-actions"><a href="/profile">{{ icon('grid') }}Ajustes do perfil</a><form method="post" action="/logout"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit">{{ icon('arrow') }}Sair da conta</button></form></div></details><div class="sidebar-version">Open source <span>v0.6.0</span></div></div>
+  </aside>
+
+  <main id="main-content" tabindex="-1">
+    <div class="workspace-top" {% if initial_view|default('catalog') != 'catalog' %}hidden{% endif %}>
+      <section class="search-panel" aria-labelledby="search-title">
+        <div class="section-heading"><div><h2 id="search-title">Nova descoberta</h2><p>Encontre estabelecimentos no Google Maps.</p></div><span class="source-badge">{{ icon('pin') }}Google Maps</span></div>
+        <div class="discovery-body">
+          <h3>Seu próximo contato começa aqui.</h3><p class="discovery-description">Escolha um segmento e uma região. Nós organizamos os detalhes.</p>
+          <form id="search-form">
+            <div class="field term-field"><label for="term">O que você procura?</label><div class="input-wrap">{{ icon('search') }}<input id="term" name="term" placeholder="Ex.: cafeterias, clínicas, lojas de açaí" required minlength="2" maxlength="120" autocomplete="off"></div></div>
+            <div class="field location-field"><label for="location">Em qual região? <span>opcional</span></label><div class="input-wrap">{{ icon('pin') }}<input id="location" name="location" placeholder="Cidade ou bairro" maxlength="160" autocomplete="off"></div></div>
+            <div class="field category-field"><div class="category-label"><label for="discovery-category">Salvar na categoria <span>opcional</span></label><button type="button" class="text-button" data-manage-categories>Gerenciar categorias</button></div><select id="discovery-category"><option value="">Sem categoria</option></select><small>Os resultados desta busca serão agrupados na categoria escolhida.</small></div>
+            <fieldset class="geo-filters"><legend>Buscar ao redor de um CEP <span>opcional</span></legend><div class="postcode-row"><div class="field"><label for="postcode">CEP de referência</label><input id="postcode" name="postcode" placeholder="00000-000" inputmode="numeric" pattern="[0-9]{5}-?[0-9]{3}" maxlength="9" autocomplete="postal-code"></div><div class="field radius-field"><label for="radius">Raio em km</label><input id="radius" name="radius_km" type="number" min="0.5" max="50" step="0.5" value="5"></div><button type="button" class="secondary-button" id="resolve-postcode">Confirmar CEP</button></div><p class="postcode-preview" id="postcode-preview" role="status" hidden></p><small>O CEP prevalece sobre a região. Distância em linha reta a partir da localização aproximada do CEP.</small></fieldset>
+            <label class="checkbox-row search-phone"><input id="require-phone" type="checkbox" checked><span>Ignorar locais sem telefone</span></label>
+            <div class="search-actions"><div class="field limit-field"><label for="limit">Máximo de resultados</label><select id="limit" name="max_results"><option value="10">10 locais</option><option value="30" selected>30 locais</option><option value="50">50 locais</option><option value="100">100 locais</option></select></div><button class="primary-button" id="search-button" type="submit">{{ icon('search') }}Encontrar leads</button></div>
+          </form>
+          <p class="search-footnote">{{ icon('info') }}Somente informações públicas disponíveis no Google Maps.</p>
+          <section id="progress-panel" class="progress-panel" aria-label="Coleta em andamento" hidden><div class="progress-top"><span class="collecting-label"><span class="spinner"></span><strong id="progress-term">Buscando…</strong></span><button id="cancel-button" class="text-button">Interromper</button></div><p id="progress-message" aria-live="polite">Preparando navegador…</p><progress id="progress-bar" max="100" value="0"></progress><div class="progress-meta"><span id="progress-count">0 locais encontrados</span><span id="progress-saved">0 catalogados</span></div></section>
+        </div>
+        <div class="discovery-hints"><div>{{ icon('pin') }}<span><strong>Busque na sua região</strong><small>Por cidade ou bairro</small></span></div><div>{{ icon('phone') }}<span><strong>Encontre contatos</strong><small>Telefone, endereço e site</small></span></div><div>{{ icon('database') }}<span><strong>Construa sua base</strong><small>Leads salvos localmente</small></span></div></div>
+      </section>
+
+      <aside class="overview-panel" aria-labelledby="overview-title"><div class="overview-heading"><h2 id="overview-title">Resumo da base</h2><span class="live-label"><span class="status-dot"></span>Local</span></div><div class="stats-list" aria-label="Resumo da base">
+        <article class="stat-card"><span class="stat-icon">{{ icon('store') }}</span><div><h3><span id="stat-total">0</span> estabelecimentos</h3><p>Organizados no catálogo</p></div></article>
+        <article class="stat-card"><span class="stat-icon phone-tint">{{ icon('phone') }}</span><div><h3><span id="stat-phone">0</span> com telefone</h3><p>Para um novo contato</p></div></article>
+        <article class="stat-card"><span class="stat-icon website-tint">{{ icon('globe') }}</span><div><h3><span id="stat-website">0</span> com website</h3><p>Conheça cada negócio</p></div></article>
+      </div><div class="base-note">{{ icon('database') }}<div><strong>Seus dados ficam com você.</strong><p>Os resultados são salvos neste computador e podem ser consultados a qualquer momento.</p></div></div><div class="source-note">Dados atualizados a cada coleta.<br>A disponibilidade varia entre locais.</div></aside>
+    </div>
+
+<section id="history-view" class="catalog-panel" aria-labelledby="history-title" hidden><div class="catalog-header"><div><h2 id="history-title">Histórico de buscas</h2><p>Acompanhe os resultados de cada coleta.</p></div></div><div id="history-list"></div></section>
+    {% include 'outreach.html' %}
+    <section id="agents-view" class="outreach-view" hidden>{% include 'ai_assistant.html' %}</section>
+    {% include 'lead_editor.html' %}
+    {% include 'crm.html' %}
+    {% include 'directory.html' %}
+    {% if initial_view|default('catalog') in ['profile', 'integrations', 'ai'] %}{% include 'settings.html' %}{% endif %}
+    <footer class="page-footer"><span>LeadFinder · Open source</span><span>Descubra. Organize. Conecte.</span></footer>
+  </main>
+  <dialog id="lead-dialog" aria-labelledby="detail-name"><div class="dialog-top"><span>Detalhes do estabelecimento</span><button id="close-dialog" class="icon-button" aria-label="Fechar detalhes">{{ icon('close') }}</button></div><div id="lead-detail"></div></dialog>
+  <div id="toast-region" class="toast-region" role="status" aria-live="polite"></div>
+</body>
+</html>

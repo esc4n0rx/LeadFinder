@@ -1,0 +1,11 @@
+{
+  "name": "leadfinder-whatsapp-bridge",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Private stdio adapter for the LeadFinder WhatsApp integration",
+  "license": "MIT",
+  "engines": { "node": ">=22.12" },
+  "dependencies": { "whatsapp-web.js": "1.34.7", "qrcode": "1.5.4" },
+  "overrides": { "puppeteer": "25.16.0" },
+  "scripts": { "check": "node --check bridge.cjs" }
+}

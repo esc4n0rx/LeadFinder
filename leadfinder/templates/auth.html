@@ -1,0 +1,28 @@
+{% macro icon(name) -%}<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-{{ name }}"></use></svg>{%- endmacro %}
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="leadfinder-token" content="{{ csrf_token() }}"><title>LeadFinder · {{ {'welcome':'Bem-vindo','login':'Entrar','register':'Criar conta','setup':'Seu workspace','profile':'Meu perfil','expired':'Sessão expirada'}[mode] }}</title><script src="{{ url_for('static', filename='js/theme.js', v='4') }}"></script><link rel="stylesheet" href="{{ url_for('static', filename='css/app.css', v='6') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css', v='4') }}"><link rel="icon" type="image/png" href="{{ url_for('static',filename='images/leadfinder-symbol.png',v='1') }}"></head>
+<body class="auth-page">
+{% include 'icons.html' %}
+<header class="auth-header"><a href="/" class="brand"><span class="brand-mark"><img class="brand-logo" src="{{ url_for('static',filename='images/leadfinder-symbol.png',v='1') }}" alt="" width="28" height="28"></span>LeadFinder</a><div class="auth-header-actions">{% if mode == 'profile' %}<a href="/" class="secondary-button">Voltar ao catálogo</a>{% endif %}<button id="theme-toggle" class="theme-row" type="button" role="switch" aria-label="Modo escuro" aria-checked="false">{{ icon('moon') }}<span class="switch-track" aria-hidden="true"><span></span></span></button></div></header>
+
+{% if mode == 'profile' %}<nav class="profile-tabs" aria-label="Ajustes"><a href="/profile" aria-current="page">Perfil</a><a href="/profile/integrations">Integrações</a></nav>{% endif %}
+{% if mode == 'welcome' %}
+<main class="welcome-layout"><section class="welcome-copy"><span class="welcome-eyebrow">CADA LUGAR, UMA NOVA POSSIBILIDADE</span><h1>Encontre os contatos.<br>Construa as conexões.</h1><p>Descubra estabelecimentos, organize as informações e mantenha suas oportunidades em um workspace só seu.</p><div class="welcome-actions"><a class="primary-button" href="/register">Criar minha conta {{ icon('arrow') }}</a><a class="secondary-button" href="/login">Já tenho conta</a></div><div class="welcome-points"><span>{{ icon('pin') }}Busca por região</span><span>{{ icon('phone') }}Contatos públicos</span><span>{{ icon('database') }}Sua base organizada</span></div></section><section class="welcome-preview" aria-label="Como funciona"><div class="preview-title">{{ icon('grid') }}Seu próximo workspace<span class="preview-dot"></span></div><div class="preview-search">{{ icon('search') }}O que você quer encontrar?</div><div class="preview-step"><span>01</span><div><h2>Escolha onde buscar</h2><p>Um segmento, um CEP e o raio ideal.</p></div></div><div class="preview-step"><span>02</span><div><h2>Encontre quem faz sentido</h2><p>Somente os locais que atendem aos seus filtros.</p></div></div><div class="preview-step"><span>03</span><div><h2>Conheça cada oportunidade</h2><p>Telefone, endereço e site, sempre à mão.</p></div></div><div class="preview-footer">Menos abas abertas. Mais possibilidades.</div></section></main>
+{% else %}
+<main class="auth-main"><section class="auth-card {% if mode == 'profile' %}profile-card{% endif %}">
+{% if mode == 'expired' %}<h1>Sessão expirada</h1><p class="auth-subtitle">{{ error }}</p><a href="/login" class="primary-button">Voltar para entrar</a>
+{% else %}
+<span class="auth-card-icon">{{ icon('database' if mode == 'setup' else 'pin') }}</span>
+<h1>{{ {'login':'Bom ter você de volta.','register':'Comece uma nova descoberta.','setup':'Dê um nome ao seu espaço.','profile':'Seu perfil'}[mode] }}</h1>
+<p class="auth-subtitle">{{ {'login':'Entre com seu nome de usuário e senha.','register':'Crie sua conta para organizar suas oportunidades.','setup':'Seu workspace reúne suas buscas e contatos.','profile':'Mantenha seus dados atualizados.'}[mode] }}</p>
+{% if error %}<div class="form-alert" role="alert">{{ error }}</div>{% endif %}
+{% if saved %}<div class="form-success" role="status">Perfil atualizado com sucesso.</div>{% endif %}
+{% if mode == 'setup' and legacy_count %}<div class="legacy-notice">Encontramos {{ legacy_count }} estabelecimentos da fase anterior neste computador. Como primeira conta, você os receberá no workspace que criar agora.</div>{% endif %}
+{% include 'account_form.html' %}
+{% if mode == 'login' %}<p class="auth-switch">Ainda não tem conta? <a href="/register">Criar conta</a></p>{% elif mode == 'register' %}<p class="auth-switch">Já tem conta? <a href="/login">Entrar</a></p>{% elif mode == 'setup' %}<form method="post" action="/logout" class="setup-logout"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="text-button">Sair desta conta</button></form>{% endif %}
+{% endif %}
+</section></main>
+{% endif %}
+<footer class="auth-footer"><span>LeadFinder · Open source</span><span>Descubra. Organize. Conecte.</span></footer>
+</body></html>

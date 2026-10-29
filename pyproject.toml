@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "leadfinder"
+version = "0.6.0"
+description = "Catálogo local de estabelecimentos públicos encontrados no Google Maps."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "leadfinder/static/fonts/OFL.txt", "leadfinder/static/licenses/beautiful-ui-LICENSE.txt"]
+dependencies = ["Flask>=3.1,<4", "playwright>=1.55,<2", "waitress>=3.0,<4", "cryptography>=46,<50"]
+
+[project.scripts]
+leadfinder = "leadfinder.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["leadfinder*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+leadfinder = ["templates/*.html", "static/css/*.css", "static/js/*.js", "static/fonts/*", "static/images/*", "static/licenses/*", "integrations/whatsapp/*.cjs", "integrations/whatsapp/*.json", "schema.sql"]

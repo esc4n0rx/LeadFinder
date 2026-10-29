@@ -1,0 +1,7 @@
+<section class="ai-settings" aria-labelledby="ai-settings-title">
+  <div class="ai-intro"><span class="overline">SEU ASSISTENTE, SEU MODELO</span><h2 id="ai-settings-title">Inteligência para suas campanhas.</h2><p>Conecte seu provedor, escolha um modelo e crie mensagens com mais clareza.</p></div>
+  <div id="ai-provider-cards" class="ai-provider-grid" aria-live="polite"><p>Carregando integrações…</p></div>
+  <div class="ai-integration-note">{{ icon('database') }}<div><strong>Suas chaves ficam protegidas.</strong><p>Criptografadas neste computador e separadas por workspace. A conversa usa a API e o saldo do provedor selecionado.</p><small>Uma assinatura do aplicativo ChatGPT ou Claude não configura uma chave de API aqui.</small></div></div>
+  <a class="secondary-button" href="/messages?tab=assistant">Criar mensagens com IA {{ icon('arrow') }}</a>
+</section>
+<dialog id="ai-config-dialog" class="ai-config-dialog" aria-labelledby="ai-config-title"><div class="ai-config-dialog-header"><div><span class="overline">INTEGRAÇÃO DE IA</span><h3 id="ai-config-title">Configurar provedor</h3></div><button class="icon-button" id="ai-config-close" type="button" aria-label="Fechar configuração">{{ icon('close') }}</button></div><div id="ai-config-dialog-body"></div></dialog>

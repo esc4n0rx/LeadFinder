@@ -1,0 +1,21 @@
+<form method="post" class="auth-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {% if mode in ['register','profile'] %}
+  <div><label for="auth-name">Nome completo</label><input id="auth-name" name="name" required minlength="2" maxlength="80" autocomplete="name" value="{{ request.form.get('name', current_user.name if mode == 'profile' else '') }}"></div>
+  {% endif %}
+  {% if mode in ['register','login','profile'] %}
+  <div><label for="auth-username">Nome de usuário</label><input id="auth-username" name="username" required minlength="3" maxlength="32" autocomplete="username" autocapitalize="none" spellcheck="false" pattern="[A-Za-z0-9_.\-]{3,32}" value="{{ request.form.get('username', current_user.username if mode == 'profile' else '') }}">{% if mode == 'register' %}<small>Use letras, números, ponto, hífen ou sublinhado.</small>{% endif %}</div>
+  {% endif %}
+  {% if mode in ['register','profile'] %}
+  <div><label for="auth-email">Email</label><input id="auth-email" name="email" type="email" required maxlength="254" autocomplete="email" value="{{ request.form.get('email', current_user.email if mode == 'profile' else '') }}"></div>
+  {% endif %}
+  {% if mode == 'setup' %}
+  <div><label for="workspace-name">Nome do workspace</label><input id="workspace-name" name="workspace_name" required minlength="2" maxlength="80" placeholder="Ex.: Minha prospecção" value="{{ request.form.get('workspace_name','') }}" autofocus></div>
+  {% elif mode == 'profile' %}
+  <div><label for="current-password">Senha atual</label><input id="current-password" name="current_password" type="password" required maxlength="128" autocomplete="current-password"><small>Confirme sua senha para salvar alterações.</small></div><div><label for="new-password">Nova senha <span>opcional</span></label><input id="new-password" name="new_password" type="password" minlength="8" maxlength="128" autocomplete="new-password"><small>Deixe em branco para manter a senha atual.</small></div><div><label for="password-confirmation">Confirmar nova senha</label><input id="password-confirmation" name="password_confirmation" type="password" maxlength="128" autocomplete="new-password"></div>
+  {% else %}
+  <div><label for="auth-password">Senha</label><input id="auth-password" name="password" type="password" required minlength="{{ 8 if mode == 'register' else 1 }}" maxlength="128" autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}">{% if mode == 'register' %}<small>Pelo menos 8 caracteres.</small>{% endif %}</div>
+  {% if mode == 'register' %}<div><label for="password-confirmation">Confirmar senha</label><input id="password-confirmation" name="password_confirmation" type="password" required minlength="8" maxlength="128" autocomplete="new-password"></div>{% endif %}
+  {% endif %}
+  <button class="primary-button auth-submit" type="submit">{{ {'login':'Entrar','register':'Criar conta','setup':'Criar workspace','profile':'Salvar alterações'}[mode] }} {{ icon('arrow') }}</button>
+</form>

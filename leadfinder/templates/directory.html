@@ -1,0 +1,33 @@
+<section id="directory-view" class="catalog-panel" hidden aria-labelledby="directory-title">
+  <div class="catalog-header directory-heading"><div><h2 id="directory-title">Seus leads <span id="directory-count" class="count-badge">0</span></h2><p>Organize sua base e acompanhe cada contato.</p></div><button class="secondary-button" type="button" data-manage-categories>{{ icon('grid') }}Gerenciar categorias</button></div>
+  <div class="directory-filters"><div class="field"><label for="directory-search">Busca de origem</label><select id="directory-search"><option value="">Todas as buscas</option></select></div>
+    <div class="field"><label for="directory-query">Buscar lead</label><input id="directory-query" type="search" placeholder="Nome, telefone ou endereço"></div>
+    <div class="field"><label for="directory-category">Categoria</label><select id="directory-category"><option value="">Todas as categorias</option><option value="0">Sem categoria</option></select></div>
+    <div class="field"><label for="directory-status">Status do contato</label><select id="directory-status"><option value="">Todos os status</option><option value="new">Sem contato</option><option value="contacted">Contato iniciado</option><option value="conversed">Já houve conversa</option></select></div>
+    <div class="field"><label for="directory-sort">Organizar por</label><select id="directory-sort"><option value="category">Categoria</option><option value="recent">Atualização mais recente</option></select></div>
+    <div class="field"><label for="directory-stage">Etapa comercial</label><select id="directory-stage"><option value="">Todas as etapas</option></select></div>
+    <button type="button" class="secondary-button" id="directory-clear">Limpar filtros</button>
+  </div>
+  <div class="lead-selection-bar"><strong id="lead-selection-count">0 selecionados</strong><button class="text-button" id="directory-select-all" type="button">Selecionar filtrados</button><button class="text-button" id="directory-clear-selection" type="button">Limpar seleção</button><button class="secondary-button" id="directory-bulk" type="button" disabled>Ações em lote</button><button class="secondary-button" id="directory-delete" type="button">Excluir selecionados</button><button class="secondary-button" id="directory-export" type="button">Exportar CSV</button><button class="secondary-button" id="directory-ai" type="button" disabled>Mensagens com IA</button><button class="primary-button" id="directory-campaign" type="button" disabled>Criar campanha</button></div>
+  <p class="directory-note">Um envio real confirmado inicia o contato. Marque “Já houve conversa” quando você tiver conversado com o lead.</p>
+  <div class="directory-feedback" id="directory-feedback" role="status" hidden></div>
+  <div class="table-scroll" id="directory-table" tabindex="0" role="region" aria-label="Tabela de leads organizada por categoria" hidden><table><thead><tr><th class="selection-cell"><input type="checkbox" id="directory-select-page" aria-label="Selecionar leads desta página"></th><th>Estabelecimento</th><th>Categorias</th><th>Contato</th><th>Localização</th><th>Avaliação</th><th>Status do contato</th><th>Etapa comercial</th><th>Atualização</th><th>Ações</th></tr></thead><tbody id="directory-body"></tbody></table></div>
+  <div class="empty-state" id="directory-empty" hidden><span class="empty-icon">{{ icon('grid') }}</span><h3>Nenhum lead encontrado</h3><p>Faça uma busca ou ajuste os filtros para encontrar seus leads.</p></div>
+  <div class="catalog-footer"><span id="directory-results">Carregando leads…</span><div class="pagination" id="directory-pagination" hidden><button type="button" id="directory-prev" aria-label="Página anterior de leads">←</button><span id="directory-page">1</span><button type="button" id="directory-next" aria-label="Próxima página de leads">→</button></div></div>
+</section>
+
+<dialog id="categories-dialog" class="directory-dialog" aria-labelledby="categories-title">
+  <div class="dialog-top"><h2 id="categories-title">Categorias</h2><button type="button" class="icon-button" data-close-directory-dialog aria-label="Fechar categorias">{{ icon('close') }}</button></div>
+  <p>Crie grupos para suas buscas e leads. Excluir uma categoria mantém os estabelecimentos no catálogo.</p>
+  <form id="category-create" class="category-create"><div class="field"><label for="category-name">Nome da categoria</label><input id="category-name" required minlength="2" maxlength="60" placeholder="Ex.: Restaurantes · Zona Norte" autocomplete="off"></div><button type="submit" class="primary-button">Criar categoria</button></form>
+  <p id="categories-feedback" role="status" hidden></p><div id="categories-list"></div>
+</dialog>
+
+<dialog id="organize-dialog" class="directory-dialog" aria-labelledby="organize-title">
+  <div class="dialog-top"><h2 id="organize-title">Organizar lead</h2><button type="button" class="icon-button" data-close-directory-dialog aria-label="Fechar organização">{{ icon('close') }}</button></div>
+  <p id="organize-name"></p><form id="organize-form">
+    <div class="field"><label for="organize-status">Status do contato deste lead</label><select id="organize-status"><option value="new">Sem contato</option><option value="contacted">Contato iniciado</option><option value="conversed">Já houve conversa</option></select></div>
+    <fieldset class="organize-categories"><legend>Categorias do lead</legend><div id="organize-categories"></div></fieldset>
+    <p id="organize-feedback" role="status" hidden></p><div class="directory-dialog-actions"><button type="button" class="secondary-button" data-close-directory-dialog>Cancelar</button><button type="submit" class="primary-button">Salvar organização</button></div>
+  </form>
+</dialog>

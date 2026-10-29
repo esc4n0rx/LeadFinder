@@ -1,0 +1,16 @@
+/* Native CSS adaptation of Beautiful UI ChatComposer, PromptBar, LoadingState,
+ * Search and RecommendationCard. Copyright (c) 2026 Shane Levine. MIT license:
+ * /static/licenses/beautiful-ui-LICENSE.txt. Colors use LeadFinder theme tokens. */
+.bui-loading { display:flex; align-items:center; gap:10px; padding:16px 0; color:var(--text-secondary); font-size:13px; }
+.bui-loading time { font-variant-numeric:tabular-nums; font-size:11px; opacity:.7; }
+.bui-loader-grid { display:grid; grid-template-columns:repeat(3,4px); gap:1.5px; flex-shrink:0; }
+.bui-pixel { width:4px; height:4px; background:var(--brand); border-radius:1px; opacity:.15; animation:bui-pixel-on 650ms ease-in-out infinite; }
+.bui-pixel-0,.bui-pixel-6 { animation-delay:90ms; }.bui-pixel-1,.bui-pixel-7 { animation-delay:180ms; }
+.bui-pixel-2,.bui-pixel-8 { animation-delay:270ms; }.bui-pixel-3 { animation-delay:0ms; }.bui-pixel-4 { animation-delay:90ms; }.bui-pixel-5 { animation-delay:180ms; }
+@keyframes bui-pixel-on { 0%,100% { opacity:.15; } 45% { opacity:1; } }
+.bui-recommendation { border:1px solid var(--border-hairline); border-radius:12px; background:var(--bg-app); box-shadow:0 1px 2px #00000006; }
+.ai-chat-composer { border:1px solid var(--border-control); border-radius:14px; background:var(--bg-app); box-shadow:0 1px 3px #00000008; transition:border-color 150ms,box-shadow 150ms; }
+.ai-chat-composer:focus-within { border-color:var(--brand); box-shadow:0 0 0 2px var(--brand-tint); }
+.ai-send-button { transition:background-color 150ms,transform 150ms; }
+.ai-send-button:enabled:active { transform:scale(.96); }
+@media (prefers-reduced-motion:reduce) { .bui-pixel { animation:none; opacity:.45; }.ai-chat-composer,.ai-send-button { transition:none; } }

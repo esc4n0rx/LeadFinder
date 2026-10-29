@@ -1,0 +1,30 @@
+{# Beautiful UI ChatComposer / PromptBar adaptation (MIT); see static/licenses/beautiful-ui-LICENSE.txt. #}
+<section id="ai-assistant" class="ai-assistant" aria-labelledby="ai-assistant-title">
+  <div class="ai-assistant-layout" id="ai-chat-layout">
+    <button class="ai-history-backdrop" id="ai-history-backdrop" type="button" aria-label="Fechar conversas" tabindex="-1" hidden></button>
+    <aside class="ai-history" id="ai-history-panel" aria-label="Conversas com o agente">
+      <div class="ai-history-heading"><h3>Suas conversas</h3><span class="count-badge" id="ai-thread-count">0</span></div>
+      <button class="secondary-button" id="ai-new-thread" type="button">{{ icon('plus') }}Nova conversa</button>
+      <div class="ai-history-search">{{ icon('search') }}<input id="ai-thread-search" type="search" placeholder="Buscar conversa…" aria-label="Buscar conversa" autocomplete="off"></div>
+      <div id="ai-thread-list"></div>
+      <a class="ai-history-settings" href="/profile/integrations/ai">{{ icon('grid') }}Gerenciar integrações</a>
+    </aside>
+    <div class="ai-conversation">
+      <header class="ai-chat-heading"><div><button class="icon-button" id="ai-history-toggle" type="button" aria-label="Alternar lista de conversas" aria-controls="ai-history-panel" aria-expanded="true">{{ icon('history') }}</button><div class="ai-chat-title"><h3 id="ai-assistant-title">Nova conversa</h3><small>Agente do workspace · <a href="/workspace">Contexto do produto ↗</a></small></div></div><a class="text-button" href="/profile/integrations/ai" title="Configurar inteligência artificial">Configurar IA ↗</a></header>
+      <div class="ai-transcript-stage">
+        <div id="ai-chat-history" class="ai-chat-history" role="log" aria-label="Conversa com a IA" aria-live="polite" aria-relevant="additions" tabindex="0"></div>
+        <button id="ai-scroll-bottom" class="secondary-button ai-scroll-bottom" type="button" hidden>↓ Últimas mensagens</button>
+      </div>
+      <div class="ai-composer-area">
+        <p id="ai-chat-connection" class="ai-chat-notice" role="status"></p>
+        <form id="ai-chat-form" class="ai-chat-composer">
+          <label for="ai-chat-prompt" class="sr-only">Sobre seu produto ou campanha</label>
+          <textarea id="ai-chat-prompt" required maxlength="6000" rows="2" placeholder="Peça para buscar leads, criar mensagens, organizar um funil…" aria-describedby="ai-compose-help"></textarea>
+          <div class="ai-composer-controls"><div class="ai-model-controls"><label for="ai-chat-provider" class="sr-only">Provedor de IA</label><select id="ai-chat-provider" aria-label="Provedor de IA"></select><label for="ai-chat-model" class="sr-only">Modelo</label><input id="ai-chat-model" readonly aria-describedby="ai-model-help"><span class="sr-only" id="ai-model-help">Modelo configurado na integração.</span></div><button id="ai-send" class="primary-button ai-send-button" type="submit" aria-label="Conversar com a IA"><span class="ai-send-label">Enviar</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div>
+        </form>
+        <div class="ai-composer-footnote"><small id="ai-compose-help">Enter envia · Shift + Enter quebra a linha. Acompanhe as ações na conversa.</small><span id="ai-prompt-count">0 / 6.000</span></div>
+        <p id="ai-chat-status" class="ai-chat-status" role="status"></p>
+      </div>
+    </div>
+  </div>
+</section>

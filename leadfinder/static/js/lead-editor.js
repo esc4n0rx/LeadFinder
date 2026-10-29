@@ -1,0 +1,16 @@
+/* Manual corrections and deletion use the same domain validation as agent tools. */
+(() => {
+  'use strict';
+  const {api,toast,escape:e,refreshOverview}=window.LeadFinder,$=id=>document.getElementById(id);
+  let editing=null,preview=null;
+  const numbers=new Set(['latitude','longitude','rating','review_count']);
+  function closeDossier(){if($('dossier-dialog').open)$('dossier-dialog').close();}
+  async function changed(){document.dispatchEvent(new CustomEvent('leadfinder:crm-updated'));document.dispatchEvent(new CustomEvent('leadfinder:leads-updated'));await refreshOverview();}
+  async function edit(id){const lead=await api('/api/leads/'+id);editing=lead.id;for(const input of $('lead-edit-form').elements){if(input.name)input.value=(input.name==='description'?lead.details?.description:lead[input.name])??'';}$('lead-edit-error').textContent='';closeDossier();$('lead-edit-dialog').showModal();}
+  async function remove(ids){if(!ids.length){toast('Selecione ao menos um lead.',true);return;}preview=await api('/api/leads/delete-preview',{method:'POST',body:JSON.stringify({ids})});$('lead-delete-help').textContent=preview.count+' lead(s) serão excluídos permanentemente.';$('lead-delete-list').innerHTML=preview.leads.map(lead=>`<li>${e(lead.name)} · ${e(lead.phone||'Sem telefone')}</li>`).join('');$('lead-delete-error').textContent='';closeDossier();$('lead-delete-dialog').showModal();}
+  document.addEventListener('click',async event=>{const button=event.target.closest('[data-edit-lead],[data-delete-lead]');if(!button)return;button.disabled=true;try{if(button.dataset.editLead)await edit(button.dataset.editLead);else await remove([Number(button.dataset.deleteLead)]);}catch(error){toast(error.message,true);}finally{button.disabled=false;}});
+  document.querySelectorAll('[data-close-editor]').forEach(button=>button.addEventListener('click',()=>button.closest('dialog').close()));
+  $('directory-delete').addEventListener('click',async event=>{event.target.disabled=true;try{await remove([...window.LeadDirectory.selected]);}catch(error){toast(error.message,true);}finally{event.target.disabled=false;}});
+  $('lead-edit-form').addEventListener('submit',async event=>{event.preventDefault();event.submitter.disabled=true;try{const data={};for(const input of event.target.elements){if(input.name)data[input.name]=numbers.has(input.name)?(input.value===''?null:Number(input.value)):input.value;}await api('/api/leads/'+editing+'/edit',{method:'POST',body:JSON.stringify(data)});$('lead-edit-dialog').close();await changed();toast('Lead atualizado.');}catch(error){$('lead-edit-error').textContent=error.message;}finally{event.submitter.disabled=false;}});
+  $('lead-delete-confirm').addEventListener('click',async event=>{if(!preview)return;event.target.disabled=true;try{const result=await api('/api/leads/delete',{method:'POST',body:JSON.stringify({ids:preview.ids,fingerprint:preview.fingerprint,confirmed:true})});for(const id of preview.ids)window.LeadDirectory.selected.delete(id);preview=null;$('lead-delete-dialog').close();await changed();toast(result.deleted+' lead(s) excluído(s).');}catch(error){$('lead-delete-error').textContent=error.message;}finally{event.target.disabled=false;}});
+})();

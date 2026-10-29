@@ -1,0 +1,16 @@
+<section id="settings-view" class="settings-view" aria-label="Ajustes do perfil">
+  <div class="outreach-heading"><div><h2>Ajustes do perfil</h2><p>Gerencie seus dados e as integrações do seu workspace.</p></div></div>
+  <nav class="profile-tabs" aria-label="Ajustes"><a href="/profile" {% if initial_view == 'profile' %}aria-current="page"{% endif %}>Perfil</a><a href="/profile/integrations" {% if initial_view in ['integrations','ai'] %}aria-current="page"{% endif %}>Integrações</a></nav>
+  <div class="settings-content">
+  {% if initial_view in ['integrations','ai'] %}
+    <nav class="integration-tabs" aria-label="Tipos de integração"><a href="/profile/integrations" {% if initial_view == 'integrations' %}aria-current="page"{% endif %}>WhatsApp</a><a href="/profile/integrations/ai" {% if initial_view == 'ai' %}aria-current="page"{% endif %}>Inteligência artificial</a></nav>
+    {% if initial_view == 'ai' %}{% include 'ai_integrations.html' %}{% else %}{% include 'integrations.html' %}{% endif %}
+  {% else %}
+    <section class="auth-card profile-card" aria-labelledby="profile-title"><h2 id="profile-title">Seu perfil</h2><p class="auth-subtitle">Mantenha seus dados atualizados.</p>
+    {% if error %}<div class="form-alert" role="alert">{{ error }}</div>{% endif %}
+    {% if saved %}<div class="form-success" role="status">Perfil atualizado com sucesso.</div>{% endif %}
+    {% with mode='profile' %}{% include 'account_form.html' %}{% endwith %}
+    </section>
+  {% endif %}
+  </div>
+</section>
